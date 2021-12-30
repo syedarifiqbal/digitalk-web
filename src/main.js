@@ -11,8 +11,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueAuthenticate from 'vue-authenticate'
 import Notifications from 'vue-notification'
 // import 'vue-notification'
-// const baseURL = 'http://digitolk.liveplaygrounds.com';
-const baseURL = 'http://localhost:8000';
+const baseURL = 'http://digitolk.liveplaygrounds.com';
+// const baseURL = 'http://localhost:8000';
 export default { baseURL }
 // export baseURL;
 //sjAhBOl@Kai7NCNE
