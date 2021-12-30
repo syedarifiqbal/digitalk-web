@@ -22,6 +22,11 @@ export default {
             state.tasks.splice(taskIndex, 1, task);
             // state.tasks[taskIndex] = !state.tasks[taskIndex].completed;
         },
+        UPDATE_TASK(state, payload){
+            const taskIndex = state.tasks.findIndex(e => e.id === payload.id);
+            const task = {...payload};
+            state.tasks[taskIndex] = task;
+        },
         DELETE_TASK(state, id){
             state.tasks = state.tasks.filter(t => t.id !== id);
         }
@@ -33,6 +38,18 @@ export default {
                     .then(({ data }) => {
                         console.log(data)
                         commit('ADD_TASK', payload)
+                        resolve(data);
+                    }).catch((e) => {
+                        console.error(e);
+                        reject(e);
+                    })
+            });
+        },
+        UPDATE_TASK({ commit }, payload) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post(`/tasks/${payload.id}`, {...payload, '_method': "PUT"})
+                    .then(({ data }) => {
+                        commit('UPDATE_TASK', payload)
                         resolve(data);
                     }).catch((e) => {
                         console.error(e);
@@ -57,6 +74,18 @@ export default {
                 Vue.axios.get('/admin/tasks', { params })
                     .then(({ data }) => {
                         commit('ADD_ADMIN_TASKS', data)
+                        resolve(data);
+                    }).catch((e) => {
+                        console.error(e);
+                        reject(e);
+                    })
+            });
+        },
+        DELETE_TASK({ commit }, params) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.delete(`/tasks/${params.id}`)
+                    .then(({ data }) => {
+                        commit('DELETE_TASK', data)
                         resolve(data);
                     }).catch((e) => {
                         console.error(e);

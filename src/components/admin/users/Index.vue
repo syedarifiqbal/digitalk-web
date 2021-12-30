@@ -2,8 +2,7 @@
   <div class="py-2 my-4 mx-4 table-content">
     <div class="d-flex justify-content-between mb-0">
       <div class="d-flex">
-        <a class="d-flex p-3" href="#"
-          >All Users</a>
+        <a class="d-flex p-3" href="#">All Users</a>
       </div>
       <filters />
     </div>
@@ -29,15 +28,30 @@
           </td>
           <td>
             <b-dropdown dropleft :id="`dropdown-${user.id}`" class="m-md-2">
-              <b-dropdown-item>Third Action</b-dropdown-item>
+              <b-dropdown-item
+                @click="
+                  $router.push({
+                    name: 'admin.users.edit',
+                    params: { ID: user.id },
+                  })
+                "
+                >Edit</b-dropdown-item
+              >
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item>Third Action</b-dropdown-item>
+              <b-dropdown-item @click.prevent="deleteUser(user.id)"
+                >Delete</b-dropdown-item
+              >
             </b-dropdown>
           </td>
         </tr>
       </tbody>
     </table>
-    <MyPagination :data="users" @pageChange="loadUsers" @pagePageChange="chagneLimit"/>
+    <MyPagination
+      v-if="users"
+      :data="users"
+      @pageChange="loadUsers"
+      @pagePageChange="chagneLimit"
+    />
   </div>
 </template>
 
@@ -57,12 +71,30 @@ export default {
     this.loadUsers();
   },
   methods: {
-    loadUsers(page = 1){
-      this.$store.dispatch("LOAD_USERS", {page, per_page: this.per_page});
+    loadUsers(page = 1) {
+      this.$store.dispatch("LOAD_USERS", { page, per_page: this.per_page });
     },
-    chagneLimit(per_page){
-      this.$store.dispatch("LOAD_USERS", {page: 1, per_page});
-    }
+    chagneLimit(per_page) {
+      this.$store.dispatch("LOAD_USERS", { page: 1, per_page });
+    },
+    async deleteUser(id) {
+      try {
+        await this.$store.dispatch("DELETE_USER", { id });
+
+        this.$notify({
+          title: "Success",
+          type: "success",
+          text: "Deleted Successfully",
+        });
+        this.loadUsers();
+      } catch (error) {
+        this.$notify({
+          title: "Error",
+          type: "error",
+          text: error.response.message || "Something went wrong",
+        });
+      }
+    },
   },
 };
 </script>

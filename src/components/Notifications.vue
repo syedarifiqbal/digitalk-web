@@ -24,34 +24,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import baseUrl from '../main';
 export default {
   data: () => ({
     Pusher: window.Pusher,
     notifications: [],
+    alreadySubscribed: false,
   }),
+  computed: {
+    ...mapGetters(['authUser']),
+  },
   mounted() {
     // Enable pusher logging - don't include this in production
     // this.Pusher.logToConsole = true;
-
-    var pusher = new this.Pusher("3f4c73c6334ed62f0d32", {
-      cluster: "ap2",
-      authEndpoint: "http://localhost:8000/api/broadcasting/auth",
-      auth: {
-        headers: { Authorization: `Bearer ${this.$auth.getToken()}` },
-      },
-    });
-
-    var channel = pusher.subscribe("private-task.1");
-    channel.bind("due", (data) => {
-        // data = JSON.parse(data);
-        console.log(data);
-      const taskExists = this.notifications.findIndex(
-        (n) => n.id === data.task.id
-      );
-      if (taskExists >= 0) return;
-      this.notifications.push(data.task);
-      // app.messages.push(JSON.stringify(data));
-    });
   },
   methods: {
     deleteNotification(index) {
@@ -60,7 +46,38 @@ export default {
     remindMeLater(index) {
       alert("This feature is not build.");
     },
+    subscriptPusherEvents(){
+      var pusher = new this.Pusher("1a62105181a4f7b62bff", {
+        cluster: "ap2",
+        authEndpoint: `${baseUrl.baseURL}/api/broadcasting/auth`,
+        auth: {
+          headers: { Authorization: `Bearer ${this.$auth.getToken()}` },
+        },
+      });
+      var channel = pusher.subscribe(`private-task.${this.authUser.id}`);
+      channel.bind("due", (data) => {
+        try {
+          data = JSON.parse(data.toString());
+        } catch (error) {
+          console.log('')
+        }
+          console.log(data);
+        const taskExists = this.notifications.findIndex(
+          (n) => n.id === data.task.id
+        );
+        if (taskExists >= 0) return;
+        this.notifications.push(data.task);
+        // app.messages.push(JSON.stringify(data));
+      });
+      this.alreadySubscribed = true;
+    }
   },
+  watch: {
+    'authUser': function(){
+      if(this.authUser === undefined || this.alreadySubscribed) return;
+      this.subscriptPusherEvents();
+    }
+  }
 };
 </script>
 <style>

@@ -75,7 +75,8 @@ export default {
         this.form = task;
       },
       deleteTask(id){
-          this.$store.commit("DELETE_TASK", id);
+        if(confirm("Are you sure to delete this task?"))
+          this.$store.dispatch("DELETE_TASK", {id});
       }
   }
 };

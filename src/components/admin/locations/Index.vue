@@ -22,6 +22,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr>
+          <td colspan="4" v-if="locations.data && locations.data.length === 0">No record found</td>
+        </tr>
         <tr v-for="task in locations.data" :key="task.id">
           <td>{{ task.location }}</td>
           <td>{{ task.lat }}, {{ task.lng }}</td>
@@ -31,9 +34,9 @@
           </td>
           <td>
             <b-dropdown dropleft :id="`dropdown-${task.id}`" class="m-md-2">
-              <b-dropdown-item>Third Action</b-dropdown-item>
+              <b-dropdown-item>Not implemented</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item>Third Action</b-dropdown-item>
+              <b-dropdown-item>Not implemented</b-dropdown-item>
             </b-dropdown>
           </td>
         </tr>

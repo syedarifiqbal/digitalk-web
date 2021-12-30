@@ -18,9 +18,12 @@
     </ul>
   </header>
   <nav>
-      <create-task  :task="undefined" :admin="true"/>
+    <div v-if="!isUserPage">
+      <create-task :task="undefined" :admin="true"/>
       <div class="mx-3"></div>
       <create-location :admin="true"/>
+    </div>
+    <router-link :to="{ name: 'admin.users.create' }" class="admin-create-icon"><i class="fa fa-plus"></i> Add User</router-link>
   </nav>
 </div>
 </template>
@@ -33,6 +36,9 @@ export default {
   components: { CreateTask, CreateLocation },
   computed: {
     ...mapGetters(["authUser"]),
+    isUserPage(){
+      return this.$route.name.includes('admin.users.')
+    }
   },
 };
 </script>

@@ -12,7 +12,13 @@ export default {
     actions: {
         LOAD_USER({ commit }) {
             return new Promise((resolve, reject) => {
-                Vue.axios.get('/user')
+                // console.log()
+                const token = Vue.prototype.$auth.getToken();
+                Vue.prototype.axios.get('/user', {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
                     .then(({ data }) => {
                         commit('SET_AUTH', data)
                         resolve(data);
@@ -24,7 +30,7 @@ export default {
         }
     },
     getters: {
-        isAuthenticated: state => Vue.$auth.isAuthenticated(),
+        isAuthenticated: state => Vue.prototype.$auth.isAuthenticated(),
         authUser: state => state.user,
     }
 }

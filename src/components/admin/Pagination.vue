@@ -1,6 +1,6 @@
 <template>
 
-<div class="pagination d-flex" v-if="data">
+<div class="pagination d-flex">
 
     <p>Rows per page</p>
     <select v-model="per_page">

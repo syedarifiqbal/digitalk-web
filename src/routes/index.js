@@ -59,22 +59,24 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+
+    if(!store.getters.authUser){
+        try {
+            await store.dispatch('LOAD_USER');
+        } catch (error) {
+            console.log("Unauthenticated!");
+        }
+    }
     
     const isAuth = Vue.prototype.$auth.isAuthenticated();
     const isAdminRoute = (to.name || '').startsWith('admin.');
     
-    console.log(to, isAuth, isAdminRoute);
-
     if(to.matched.some(record => record.meta.auth)){
         if(isAuth) next();
         else next({ name: 'login' });
     }
 
     if(to.matched.some(record => record.meta.auth && record.meta.admin)){
-
-        if(!store.getters.authUser){
-            await store.dispatch('LOAD_USER');
-        }
 
         if(isAuth && store.getters.authUser && store.getters.authUser.is_admin) next()
         else next({name: 'admin.login'})

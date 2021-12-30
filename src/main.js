@@ -9,17 +9,26 @@ import { BootstrapVue } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueAuthenticate from 'vue-authenticate'
+import Notifications from 'vue-notification'
+// import 'vue-notification'
+// const baseURL = 'http://digitolk.liveplaygrounds.com';
+const baseURL = 'http://localhost:8000';
+export default { baseURL }
+// export baseURL;
+//sjAhBOl@Kai7NCNE
+//
 
+Vue.use(Notifications)
 Vue.use(VueAuthenticate, {
   tokenName: 'token',
   storageType: 'localStorage',
   tokenPath: 'token',
-  providers: {
-    github: {
-      clientId: '',
-      redirectUri: 'http://localhost:8080/auth/callback' // Your client app URL
-    }
-  },
+  // providers: {
+  //   github: {
+  //     clientId: '',
+  //     redirectUri: 'https://protected-cliffs-80105.herokuapp.com/auth/callback' // Your client app URL
+  //   }
+  // },
   bindRequestInterceptor: function () {
     this.$http.interceptors.request.use((config) => {
       if (this.isAuthenticated()) {
@@ -45,7 +54,7 @@ Vue.use(VueAuthenticate, {
 Vue.config.productionTip = false
 Vue.use(VeeValidate)
 Vue.use(VueAxios, axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: `${baseURL}/api/`,
 }))
 Vue.use(BootstrapVue)
 Vue.component('pagination', require('laravel-vue-pagination'));

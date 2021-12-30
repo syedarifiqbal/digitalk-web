@@ -21,6 +21,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr>
+          <td colspan="4" v-if="adminTasks.data && adminTasks.data.length === 0">No record found</td>
+        </tr>
         <tr v-for="task in adminTasks.data" :key="task.id">
           <td>{{ task.summary }}</td>
           <td>{{ task.completed ? "Complated" : "Incomplete" }}</td>

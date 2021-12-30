@@ -45,17 +45,10 @@
 
           <div class="input-group px-3 mt-4">
             <i class="far fa-clock"></i>
-            <!-- <input
-                v-validate="'required'"
-                name="due_time"
-                data-vv-as="due time"
-                v-model="form.due_time"
-                type="datetime-local"
-              /> -->
             <Datetime
               hidden-name="due_date"
               type="datetime"
-              v-model="form.due_at"
+              v-model="due_at"
             />
           </div>
 
@@ -101,6 +94,7 @@ export default {
       due_at: "",
       completed: false,
     },
+    due_at: '',
   }),
   mounted() {
     // this.$http.get(api).then((response) => {
@@ -117,8 +111,7 @@ export default {
         return;
       }
       try {
-        const data = await this.$store.dispatch("CREATE_TASK", this.form);
-        console.log(data);
+        const data = await this.$store.dispatch(this.form.id? "UPDATE_TASK": "CREATE_TASK", this.form);
       } catch (error) {
         this.$bvModal.hide("modal-1");
       }
@@ -132,7 +125,7 @@ export default {
       this.form = {
         summary: "",
         description: "",
-        due_at: "",
+        // due_at: "",
         completed: false,
       };
     },
@@ -143,6 +136,9 @@ export default {
 
       this.form = { ...this.task };
       this.$bvModal.show("modal-1");
+    },
+    due_at: function () {
+      this.form.due_at = this.due_at;
     },
   },
 };
