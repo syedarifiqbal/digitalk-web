@@ -64,7 +64,7 @@ header ul li img {
 }
 header+nav {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   padding: 0 25px;
 }
 </style>

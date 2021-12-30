@@ -137,7 +137,7 @@ export default {
 .notification-footer {
   background: #f7f5f5;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .notification-footer a {
