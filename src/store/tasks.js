@@ -20,7 +20,7 @@ export default {
             const task = {...state.tasks[taskIndex]};
             task.completed = !task.completed;
             state.tasks.splice(taskIndex, 1, task);
-            // state.tasks[taskIndex] = !state.tasks[taskIndex].completed;
+            // // state.tasks[taskIndex] = !state.tasks[taskIndex].completed;
         },
         UPDATE_TASK(state, payload){
             const taskIndex = state.tasks.findIndex(e => e.id === payload.id);
